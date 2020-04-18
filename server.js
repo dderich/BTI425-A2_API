@@ -15,17 +15,6 @@ app.use(cors());
 const manager = require("./manager.js");
 const m = manager();
 
-// This handles a situation where the requestor sends
-// a URL for a specific resource within the app
-// The resource will not exist here at the server,
-// because it exists only in the client device AFTER
-// the Angular app is loaded
-// So... handle all requests for anything other than the root
-app.get('*', function (req, res) {
-  console.log('Redirect was triggered');
-  res.sendFile(__dirname + '/public/index.html');
-});
-
 app.get("/api", (req, res) => {
   const links = [];
   links.push({ "rel": "collection", "href": "/api/termEnglish", "methods": "GET" });
@@ -230,6 +219,18 @@ app.put("/terms/other/definition-like/:id", (req, res) => {
 app.use((req, res) => {
   res.status(404).send("Resource not found");
 });
+
+// This handles a situation where the requestor sends
+// a URL for a specific resource within the app
+// The resource will not exist here at the server,
+// because it exists only in the client device AFTER
+// the Angular app is loaded
+// So... handle all requests for anything other than the root
+app.get('*', function (req, res) {
+  console.log('Redirect was triggered');
+  res.sendFile(__dirname + '/public/index.html');
+});
+
 // ################################################################################
 // Attempt to connect to the database, and
 // tell the app to start listening for requests
