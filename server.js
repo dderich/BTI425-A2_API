@@ -164,7 +164,7 @@ app.post("/terms/other", (req, res) => {
     })
     .catch((error) => {
       res.status(500).json({ "message": error });
-    }) // OOOOOOOOOOOOOOOOOOOOOOOOO
+    })
 });
 
 // 5. edit existing (termNonEnglish document), to add a new definition
@@ -175,7 +175,7 @@ app.put("/terms/other/:id/add-definition", (req, res) => {
     })
     .catch((error) => {
       res.status(404).json({ "message": error });
-    }) // TOOOOOOOOOOOOOOOOOOOOOO
+    })
 });
 
 

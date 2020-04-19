@@ -113,7 +113,7 @@ module.exports = function () {
     },
     TermsEnglishHelpNo: async function (termId, termBody) {
       // Early exit, confirm that the parameter and entity body match
-      if (termId !== termBody._id) {
+      if (termId !== termBody._id) { 
         throw "IDs do not match in HELP NO";
       }
 
@@ -129,6 +129,7 @@ module.exports = function () {
 
 
     TermsEnglishDefinitionIncrementLikes: async function (definitionID, termBody) {
+      let temporary = await English.findById(termBody._id); // FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
       let term = await English.findOne({ "definitions._id": definitionID });
       if (term) {
