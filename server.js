@@ -5,8 +5,6 @@ const bodyParser = require('body-parser');
 const app = express();
 const HTTP_PORT = process.env.PORT || 8080;
 
-// Setup static content folder
-app.use(express.static("public"));
 // Add support for incoming JSON entities
 app.use(bodyParser.json());
 // Add support for CORS
@@ -14,6 +12,12 @@ app.use(cors());
 
 const manager = require("./manager.js");
 const m = manager();
+
+// Deliver the app's home page to browser clients
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "/index.html"));
+});
 
 app.get("/api", (req, res) => {
   const links = [];
@@ -218,17 +222,6 @@ app.put("/terms/other/definition-like/:id", (req, res) => {
 // Resource not found (this should be at the end)
 app.use((req, res) => {
   res.status(404).send("Resource not found");
-});
-
-// This handles a situation where the requestor sends
-// a URL for a specific resource within the app
-// The resource will not exist here at the server,
-// because it exists only in the client device AFTER
-// the Angular app is loaded
-// So... handle all requests for anything other than the root
-app.get('*', function (req, res) {
-  console.log('Redirect was triggered');
-  res.sendFile(__dirname + '/public/index.html');
 });
 
 // ################################################################################
