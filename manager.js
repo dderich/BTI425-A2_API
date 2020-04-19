@@ -128,7 +128,7 @@ module.exports = function () {
     },
 
 
-    TermsEnglishDefinitionIncrementLikes: async function (definitionID) {
+    TermsEnglishDefinitionIncrementLikes: async function (definitionID, termBody) {
 
       let term = await English.findOne({ "definitions._id": definitionID });
       if (term) {
@@ -240,7 +240,7 @@ module.exports = function () {
         throw "Could not find that NON-English Term: Help Yes";
       }
     },
-    TermsNonEnglishDefinitionIncrementLikes: async function (definitionID) {
+    TermsNonEnglishDefinitionIncrementLikes: async function (definitionID, nonEngTermBody) {
 
       let term = await NonEnglish.findOne({ "definitions._id": definitionID });
       if (term) {

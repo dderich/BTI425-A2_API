@@ -111,7 +111,7 @@ app.put("/terms/english/helpno/:id", (req, res) => {
 
 // 8. edit existing (definition document), to increment the “likes” value
 app.put("/terms/english/definition-like/:id", (req, res) => {
-  m.TermsEnglishDefinitionIncrementLikes(req.params.id)
+  m.TermsEnglishDefinitionIncrementLikes(req.params.id, req.body)
     .then((data) => {
       res.json(data);
     })
@@ -204,7 +204,7 @@ app.put("/terms/other/helpno/:id", (req, res) => {
 
 // 8. edit existing (definition document), to increment the “likes” value
 app.put("/terms/other/definition-like/:id", (req, res) => {
-  m.TermsNonEnglishDefinitionIncrementLikes(req.params.id)
+  m.TermsNonEnglishDefinitionIncrementLikes(req.params.id, req.body)
     .then((data) => {
       res.json(data);
     })
