@@ -52,15 +52,12 @@ module.exports = function () {
       });
     },
     TermsEnglishGetOneById: function (termId) {
-      return new Promise(function (resolve, reject) {
-        English.find({ _id: termId })
-          .exec((error, items) => {
-            if (error) {
-              return reject(error.message);
-            }
-            return resolve(items);
-          });
-      })
+     let temporary = English.findById(termId);
+     if (temporary) {
+       return temporary;
+     } else {
+      throw "Not Found: TermsEnglishGetOneById";
+     }
     },
 
     TermsEnglishGetByWordEnglish: async function (text) {
