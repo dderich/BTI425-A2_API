@@ -52,12 +52,12 @@ module.exports = function () {
       });
     },
     TermsEnglishGetOneById: function (termId) {
-     let temporary = English.findById(termId);
-     if (temporary) {
-       return temporary;
-     } else {
-      throw "Not Found: TermsEnglishGetOneById";
-     }
+      let temporary = English.findById(termId);
+      if (temporary) {
+        return temporary;
+      } else {
+        throw "Not Found: TermsEnglishGetOneById";
+      }
     },
 
     TermsEnglishGetByWordEnglish: async function (text) {
@@ -75,7 +75,6 @@ module.exports = function () {
 
     TermsEnglishAdd: async function (newEngTerm) {
       let tempEnglishTerm = new English(newEngTerm);
-
       if (tempEnglishTerm) {
         await tempEnglishTerm.save();
         return tempEnglishTerm;
@@ -113,7 +112,7 @@ module.exports = function () {
     },
     TermsEnglishHelpNo: async function (termId, termBody) {
       // Early exit, confirm that the parameter and entity body match
-      if (termId !== termBody._id) { 
+      if (termId !== termBody._id) {
         throw "IDs do not match in HELP NO";
       }
 
