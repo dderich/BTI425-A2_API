@@ -155,15 +155,12 @@ module.exports = function () {
       });
     },
     TermsNonEnglishGetOneById: function (termId) {
-      return new Promise(function (resolve, reject) {
-        NonEnglish.find({ _id : termId }) // fixed
-          .exec((error, items) => {
-            if (error) {
-              return reject(error.message);
-            }
-            return resolve(items);
-          });
-      }) 
+      let temporary = NonEnglish.findById(termId);
+      if (temporary) {
+        return temporary;
+      } else {
+        throw "Not Found: TermNonEnglishGetOneById";
+      }
     },
     TermsNonEnglishGetSomeByEnglishId: function (termId) {          // added for translation buttons
       return new Promise(function (resolve, reject) {
