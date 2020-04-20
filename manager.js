@@ -128,7 +128,7 @@ module.exports = function () {
 
 
     TermsEnglishDefinitionIncrementLikes: async function (definitionID, termBody) {
-      let temporary = await English.findById(termBody._id); // FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+      let temporary = await English.findById(termBody._id);
 
       let term = await English.findOne({ "definitions._id": definitionID });
       if (term) {
