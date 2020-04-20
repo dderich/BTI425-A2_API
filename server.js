@@ -139,13 +139,23 @@ app.get("/terms/other", (req, res) => {
 });
 
 // 2. get one, by object identifier
-app.get("/terms/other/:id", (req, res) => {
+app.get("/terms/other/detail/:id", (req, res) => {
   m.TermsNonEnglishGetOneById(req.params.id)
     .then((data) => {
       res.json(data);
     })
     .catch(() => {
       res.status(404).json({ "message": "Resource not found : /terms/other/:id" });
+    })
+});
+// 2.5. get some non-english by english Id
+app.get("/terms/other/byeng/:id", (req, res) => {
+  m.TermsNonEnglishGetSomeByEnglishId(req.params.id)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch(() => {
+      res.status(404).json({ "message": "Resource not found : /terms/other/byeng/:id" });
     })
 });
 

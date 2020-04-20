@@ -142,21 +142,10 @@ module.exports = function () {
     },
 
     // NON-ENGLISH TERMS --------------------------------------------------------------------------
-    TermsNonEnglishGetOneById: function (termId) {
-      return new Promise(function (resolve, reject) {
-        NonEnglish.find({ _id: termId })
-          .exec((error, items) => {
-            if (error) {
-              return reject(error.message);
-            }
-            return resolve(items);
-          });
-      })
-    },
     TermsNonEnglishGetAll: function () {
       return new Promise((resolve, reject) => {
         NonEnglish.find()
-          .sort({ wordEnglish: 'asc' })
+          .sort({ wordNonEnglish: 'asc' })
           .exec((error, items) => {
             if (error) {
               return reject(error.message);
@@ -165,7 +154,28 @@ module.exports = function () {
           });
       });
     },
-
+    TermsNonEnglishGetOneById: function (termId) {
+      return new Promise(function (resolve, reject) {
+        NonEnglish.find({ _id : termId }) // fixed
+          .exec((error, items) => {
+            if (error) {
+              return reject(error.message);
+            }
+            return resolve(items);
+          });
+      }) 
+    },
+    TermsNonEnglishGetSomeByEnglishId: function (termId) {          // added for translation buttons
+      return new Promise(function (resolve, reject) {
+        NonEnglish.find({ termEnglishId : termId }) 
+          .exec((error, items) => {
+            if (error) {
+              return reject(error.message);
+            }
+            return resolve(items);
+          });
+      })
+    },
     TermsNonEnglishGetByWord: async function (text) {
       // URL decode the incoming value
       text = decodeURIComponent(text);
