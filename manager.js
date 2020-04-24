@@ -11,6 +11,7 @@ module.exports = function () {
   let Definition;
   let English;
   let NonEnglish;
+  //let Language;
   return {
     connect: function () {
       return new Promise(function (resolve, reject) {
@@ -87,6 +88,7 @@ module.exports = function () {
       let temporary = await English.findById(termId);
       if (temporary) {
         temporary.definitions.push(newDef);
+        temporary.dateRevised = new Date();
         await temporary.save();
         return temporary;
       }
@@ -104,6 +106,7 @@ module.exports = function () {
       let tempTerm = await English.findById(termId);
       if (tempTerm) {
         tempTerm.helpYes++;
+        tempTerm.dateRevised = new Date();
         await tempTerm.save();
         return tempTerm;
       } else {
@@ -119,6 +122,7 @@ module.exports = function () {
       let tempTerm = await English.findById(termId);
       if (tempTerm) {
         tempTerm.helpNo++;
+        tempTerm.dateRevised = new Date();
         await tempTerm.save();
         return tempTerm;
       } else {
@@ -127,10 +131,13 @@ module.exports = function () {
     },
 
 
-    TermsEnglishDefinitionIncrementLikes: async function (definitionID, termBody) {
-      let temporary = await English.findById(termBody._id);
-
-      let term = await English.findOne({ "definitions._id": definitionID });
+    TermsEnglishDefinitionIncrementLikes: async function (termId, definitionBody) {
+      let temporary = await English.findById(termId);
+      if (!temporary) {
+        throw "English Term not found!";
+      }
+ 
+      let term = await English.findOne({ "definitions._id": definitionBody._id });
       if (term) {
         let def = term.definitions.id(definitionID);
         def.likes++;
@@ -154,6 +161,7 @@ module.exports = function () {
           });
       });
     },
+
     TermsNonEnglishGetOneById: function (termId) {
       let temporary = NonEnglish.findById(termId);
       if (temporary) {
@@ -162,9 +170,11 @@ module.exports = function () {
         throw "Not Found: TermNonEnglishGetOneById";
       }
     },
-    TermsNonEnglishGetSomeByEnglishId: function (termId) {          // added for translation buttons
+
+    // added for translation buttons
+    TermsNonEnglishGetSomeByEnglishId: function (termId) {
       return new Promise(function (resolve, reject) {
-        NonEnglish.find({ termEnglishId : termId }) 
+        NonEnglish.find({ termEnglishId: termId })
           .exec((error, items) => {
             if (error) {
               return reject(error.message);
@@ -173,6 +183,7 @@ module.exports = function () {
           });
       })
     },
+
     TermsNonEnglishGetByWord: async function (text) {
       // URL decode the incoming value
       text = decodeURIComponent(text);
@@ -186,9 +197,7 @@ module.exports = function () {
       return results;
     },
 
-
     // 4. add new (termNonEnglish document, including one definition embedded subdocument)
-
     NonEnglishAdd: async function (newTerm) {
       let temporary = await English.findById(newTerm.termEnglishId);
       if (temporary) {
@@ -203,35 +212,39 @@ module.exports = function () {
         throw "No English term for that exists!";
       }
     },
+
     // 5. edit existing (termNonEnglish document), to add a new definition
     NonEnglishEditAddDefinition: async function (termId, newDef) {
       let temporary = await NonEnglish.findById(termId);
       if (temporary) {
         temporary.definitions.push(newDef);
+        temporary.dateRevised = new Date();
         await temporary.save();
         return temporary;
-      } // TO DO
+      }
       else {
         throw "Not Found : TermsEnglishEditAddDefinition";
       }
     },
 
-    // 6.
-    TermsNonEnglishHelpYes: async function (termId, termBody) {
-      // Early exit, confirm that the parameter and entity body match
+    // 6. increment Help Yes
+    TermsNonEnglishHelpYes: async function (termId, termBody) { 
       if (termId !== termBody._id) {
         throw "IDs do not match in NON-English HELP YES";
-      }
+      } // Early exit, confirm that the parameter and entity body match
 
       let tempTerm = await NonEnglish.findById(termId);
       if (tempTerm) {
         tempTerm.helpYes++;
+        tempTerm.dateRevised = new Date();
         await tempTerm.save();
         return tempTerm;
       } else {
         throw "Could not find that NON-English Term: Help Yes";
       }
     },
+
+    // 7. increment Help No
     TermsNonEnglishHelpNo: async function (termId, termBody) {
       // Early exit, confirm that the parameter and entity body match
       if (termId !== termBody._id) {
@@ -241,26 +254,32 @@ module.exports = function () {
       let tempTerm = await NonEnglish.findById(termId);
       if (tempTerm) {
         tempTerm.helpNo++;
+        tempTerm.dateRevised = new Date();
         await tempTerm.save();
         return tempTerm;
       } else {
         throw "Could not find that NON-English Term: Help Yes";
       }
     },
-    TermsNonEnglishDefinitionIncrementLikes: async function (definitionID, nonEngTermBody) {
 
-      let term = await NonEnglish.findOne({ "definitions._id": definitionID });
-      if (term) {
-        let def = term.definitions.id(definitionID);
+    // 8. Increment Likes on Definition of term
+    TermsNonEnglishDefinitionIncrementLikes: async function (nonEngId, definitionBody) {
+      let temporaryTerm = await NonEnglish.findById(nonEngId);
+      if (!temporaryTerm) {
+        throw "NON-ENGLISH TERM NOT FOUND!";
+      }
+
+      let term = await NonEnglish.findOne({ "definitions._id": definitionBody._id });
+      if (term)
+      {
+        let def = term.definitions.id(definitionBody._id);
         def.likes++;
         await term.save();
         return term;
-      } else {
+      } else
+      {
         throw "Not found: TermsNonEnglishDefinitionIncrementLikes";
       }
     }
-
-
-
   } // return
 } // module.exports

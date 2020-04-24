@@ -124,8 +124,6 @@ app.put("/terms/english/definition-like/:id", (req, res) => {
     });
 });
 
-
-
 // NON-ENGLISH TERMS --------------------------------------------------------------------------       
 // 1. get all (sorted)
 app.get("/terms/other", (req, res) => {
