@@ -139,7 +139,7 @@ module.exports = function () {
  
       let term = await English.findOne({ "definitions._id": definitionBody._id });
       if (term) {
-        let def = term.definitions.id(definitionID);
+        let def = term.definitions.id(definitionBody._id);
         def.likes++;
         await term.save();
         return term;
